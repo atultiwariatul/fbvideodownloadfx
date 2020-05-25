@@ -2,4 +2,4 @@
 *.txt
 .idea/**
 out/**
-
+**/sample/**
