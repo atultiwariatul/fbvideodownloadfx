@@ -46,7 +46,7 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
                 byteWritten += byteRead;
                 updateProgress(byteWritten, totalSize);
                 downloadDetails.setSize(byteWritten);
-                System.out.println(byteWritten+" bytes of "+totalSize+" is written to Disk");
+                //System.out.println(byteWritten+" bytes of "+totalSize+" is written to Disk");
             }
         } catch (Exception e) {
             e.printStackTrace();

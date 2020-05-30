@@ -18,6 +18,9 @@ public class CalculateDownloadSizeTask extends Task<DownloadDetails> {
 
          @Override protected DownloadDetails call() {
              URLConnection conn = null;
+             if (this.downloadDetails.getDownloadDir()==null){
+                 this.downloadDetails.setDownloadDir("/home/atul/Videos/fb");
+             }
              System.out.println("Download Directory and File:"+this.downloadDetails.getDownloadDir()+this.downloadDetails.getFileName());
              File f = new File(this.downloadDetails.getDownloadDir()+this.downloadDetails.getFileName());
              if (f.exists()){

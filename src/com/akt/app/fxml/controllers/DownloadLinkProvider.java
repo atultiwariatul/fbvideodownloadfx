@@ -1,11 +1,13 @@
 package com.akt.app.fxml.controllers;
 
 import com.akt.app.fxml.model.DownloadDetails;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,10 @@ public class DownloadLinkProvider {
             e.printStackTrace();
             if (e instanceof UnknownHostException){
                 downloadLinkObj.setMessage("Please Check your internet Connection or Service is down");
-            }else {
+            } else if (e instanceof HttpStatusException || e instanceof MalformedURLException){
+                downloadLinkObj.setMessage("Sorry! We are not able to Prepare Download URL for the link provided.");
+            }
+            else {
                 downloadLinkObj.setMessage(e.getLocalizedMessage());
             }
             return downloadLinkObj;
