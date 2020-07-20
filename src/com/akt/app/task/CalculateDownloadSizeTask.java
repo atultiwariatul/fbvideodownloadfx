@@ -1,6 +1,6 @@
-package com.akt.app.fxml.tasks;
+package com.akt.app.task;
 
-import com.akt.app.fxml.model.DownloadDetails;
+import com.akt.app.model.DownloadDetails;
 import javafx.concurrent.Task;
 
 import java.io.File;

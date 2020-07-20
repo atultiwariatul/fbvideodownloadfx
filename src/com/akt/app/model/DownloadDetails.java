@@ -1,4 +1,4 @@
-package com.akt.app.fxml.model;
+package com.akt.app.model;
 
 public class DownloadDetails {
     private String fbUrl;

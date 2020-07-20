@@ -1,0 +1,58 @@
+/*
+Caden Sumner <- Shameless Plug.
+CSS for generics present throughout the entire application.
+*/
+
+/* Universal Styles */
+
+.root
+{
+    -fx-font-family      : "Trebuchet MS", sans-serif;
+    -fx-background-color : #2C3E50;
+}
+
+/* Label Styles */
+
+.label
+{
+    -fx-text-fill : #A7BEE5;
+}
+
+/* Button Styles */
+
+.button
+{
+    -fx-font-weight       : 900;
+    -fx-background-color  : skyblue;
+    -fx-text-fill         : #2C3E50;
+    -fx-background-radius : 0;
+}
+
+.button:hover
+{
+    -fx-background-color : #202C39;
+    -fx-text-fill        : #A7BEE5;
+}
+
+.button:pressed
+{
+    -fx-background-color : #2C3E50;
+    -fx-text-fill        : #A7BEE5;
+}
+
+/* Text Field Styles */
+
+.text-field
+{
+    -fx-text-fill        : #537394;
+    -fx-background-color : #34495E;
+    -fx-border-color     : #2C3E50;
+}
+
+.text-field:focused
+{
+    -fx-background-color : #445E79;
+    -fx-text-fill        : blanchedalmond; /*What kind of name is that for a color. */
+}
+
+/* Fueled by energy drinks and candy. */

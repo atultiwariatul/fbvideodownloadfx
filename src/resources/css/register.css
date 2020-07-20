@@ -1,0 +1,10 @@
+/*
+Caden Sumner <- Shameless Plug.
+CSS for elements in the register scene.
+*/
+
+/* Error Label */
+#errorLabel
+{
+    -fx-text-fill : blanchedalmond;
+}
