@@ -1,6 +1,6 @@
-package com.akt.app.fxml.tasks;
+package com.akt.app.task;
 
-import com.akt.app.fxml.model.DownloadDetails;
+import com.akt.app.model.DownloadDetails;
 import javafx.concurrent.Task;
 
 import java.io.*;
@@ -46,7 +46,7 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
                 byteWritten += byteRead;
                 updateProgress(byteWritten, totalSize);
                 downloadDetails.setSize(byteWritten);
-                System.out.println(byteWritten+" bytes of "+totalSize+" is written to Disk");
+                //System.out.println(byteWritten+" bytes of "+totalSize+" is written to Disk");
             }
         } catch (Exception e) {
             e.printStackTrace();

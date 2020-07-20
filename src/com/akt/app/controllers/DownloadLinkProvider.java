@@ -1,11 +1,14 @@
-package com.akt.app.fxml.controllers;
+package com.akt.app.controllers;
 
-import com.akt.app.fxml.model.DownloadDetails;
+import com.akt.app.model.DownloadDetails;
+import com.akt.app.utils.ValidationUtil;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +47,11 @@ public class DownloadLinkProvider {
     }
     private DownloadDetails getDownloadLink(String fbVideoUrl)  {
         String fileName = getFileNameFromLink(fbVideoUrl);
+        String validURL = ValidationUtil.validateVideoLink(fileName);
+        System.out.println("Valid URL:"+validURL);
+        fileName = fileName.contains("=") ?  ValidationUtil.getFileName(fileName):fileName;
         System.out.println("File Name:" + fileName);
-        DownloadDetails downloadLinkObj = new DownloadDetails(fbVideoUrl,null,fileName);
+        DownloadDetails downloadLinkObj = new DownloadDetails(validURL,null,fileName);
         Element link = null;
         try {
             link = getHTMLDocument(fbVideoUrl).select("div.col-md-4").first();
@@ -53,10 +59,20 @@ public class DownloadLinkProvider {
             e.printStackTrace();
             if (e instanceof UnknownHostException){
                 downloadLinkObj.setMessage("Please Check your internet Connection or Service is down");
-            }else {
+            } else if (e instanceof HttpStatusException || e instanceof MalformedURLException){
+                downloadLinkObj.setMessage("Sorry! We are not able to Prepare Download URL for the link provided.");
+            }
+            else {
                 downloadLinkObj.setMessage(e.getLocalizedMessage());
             }
             return downloadLinkObj;
+        } catch (Exception e){
+            e.printStackTrace();
+            downloadLinkObj.setMessage(e.getMessage());
+        }
+        if (link==null){
+            downloadLinkObj.setMessage("Get Vid is not able to provide any link for this video:");
+            return null;
         }
         String downloadLink = link.select("a").first().attr("href");
         System.out.println("\n\nDownload Link:" + downloadLink);

@@ -1,9 +1,9 @@
-package com.akt.app.fxml;
+package com.akt.app;
 
-import com.akt.app.fxml.controllers.DownloadLinkProvider;
-import com.akt.app.fxml.model.DownloadDetails;
-import com.akt.app.fxml.tasks.CalculateDownloadSizeTask;
-import com.akt.app.fxml.tasks.VideoDownloadTask;
+import com.akt.app.controllers.DownloadLinkProvider;
+import com.akt.app.model.DownloadDetails;
+import com.akt.app.task.CalculateDownloadSizeTask;
+import com.akt.app.task.VideoDownloadTask;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,19 +42,24 @@ public class Main extends Application {
         VBox root = new VBox();
         root.setFillWidth(true);
         root.setAlignment(Pos.CENTER);
-
-
         EventHandler<ActionEvent> event = e -> {
             String text  = textField.getText();
             DownloadLinkProvider downloadLinkProvider = new DownloadLinkProvider(text);
             this.downloadDetails = downloadLinkProvider.getDownloadDetails().get(0);
-            this.downloadDetails.setDownloadDir(downloadDir);
-            pBar.setVisible(true);
-            System.out.println("Starting thread");
-            calculateDownloadSize(pBar,statusLabel);
+            if (this.downloadDetails.getMessage()!=null){
+                System.out.println("There is some error.");
+                statusLabel.setText(this.downloadDetails.getMessage());
+                statusLabel.setTextFill(Color.RED);
+            }else {
+                this.downloadDetails.setDownloadDir(downloadDir);
+                pBar.setVisible(true);
+                System.out.println("Starting thread");
+                calculateDownloadSize(pBar, statusLabel);
+            }
         };
 
         Button b = new Button("Download");
+        b.setDisable(true);
         Button directorySelect = new Button("Choose Download Directory");
         directorySelect.setOnAction(event1 -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -64,6 +69,7 @@ public class Main extends Application {
             }else{
                 downloadDir = selectedDirectory.getAbsolutePath()+"/";
                 System.out.println("After directory selector:"+this.downloadDetails.getDownloadDir());
+                b.setDisable(false);
             }
         });
         b.setOnAction(event);
@@ -118,6 +124,7 @@ public class Main extends Application {
     private void downloadVideo(ProgressBar progressBar, Label statusLabel){
         statusLabel.setText("Starting Download...");
         VideoDownloadTask videoDownloadTask = new VideoDownloadTask(downloadDetails);
+        statusLabel.setText("Download Started...");
         progressBar.progressProperty().bind(videoDownloadTask.progressProperty());
         Thread thread = new Thread(videoDownloadTask);
         thread.setDaemon(true);
