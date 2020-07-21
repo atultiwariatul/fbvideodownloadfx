@@ -5,13 +5,18 @@ import com.akt.app.services.DownloadService;
 import com.akt.app.task.CalculateDownloadSizeTask;
 import com.akt.app.task.VideoDownloadTask;
 import com.akt.app.utils.ValidationUtil;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
@@ -111,16 +116,17 @@ public class DownloadScreenController {
             DownloadLinkProvider downloadLinkProvider = null;
             try {
                 downloadLinkProvider = new DownloadLinkProvider(text);
-                this.downloadDetails = downloadLinkProvider.getDownloadDetails().get(0);
             }catch (Exception e1){
                 e1.printStackTrace();
+                statusLabel.setWrapText(true);
                 statusLabel.setText("We got some serious error while processing:"+e1.getMessage());
                 statusLabel.setTextFill(Color.RED);
                 return;
             }
-
+            this.downloadDetails = downloadLinkProvider.getDownloadDetails().get(0);
             if (this.downloadDetails.getMessage()!=null){
                 System.out.println("There is some error.");
+                statusLabel.setWrapText(true);
                 statusLabel.setText(this.downloadDetails.getMessage());
                 statusLabel.setTextFill(Color.RED);
             }else {
@@ -131,5 +137,47 @@ public class DownloadScreenController {
             }
         };
         return event;
+    }
+
+    class ProgressIndicatorBar extends StackPane {
+        final private ReadOnlyDoubleProperty workDone;
+        final private double totalWork;
+
+        final private ProgressBar bar  = new ProgressBar();
+        final private Text text = new Text();
+        final private String      labelFormatSpecifier;
+
+        final private static int DEFAULT_LABEL_PADDING = 5;
+
+        ProgressIndicatorBar(final ReadOnlyDoubleProperty workDone, final double totalWork, final String labelFormatSpecifier) {
+            this.workDone  = workDone;
+            this.totalWork = totalWork;
+            this.labelFormatSpecifier = labelFormatSpecifier;
+
+            syncProgress();
+            workDone.addListener(new ChangeListener<Number>() {
+                @Override public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    syncProgress();
+                }
+            });
+
+            bar.setMaxWidth(Double.MAX_VALUE); // allows the progress bar to expand to fill available horizontal space.
+
+            getChildren().setAll(bar, text);
+        }
+
+        // synchronizes the progress indicated with the work done.
+        private void syncProgress() {
+            if (workDone == null || totalWork == 0) {
+                text.setText("");
+                bar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            } else {
+                text.setText(String.format(labelFormatSpecifier, Math.ceil(workDone.get())));
+                bar.setProgress(workDone.get() / totalWork);
+            }
+
+            bar.setMinHeight(text.getBoundsInLocal().getHeight() + DEFAULT_LABEL_PADDING * 2);
+            bar.setMinWidth (text.getBoundsInLocal().getWidth()  + DEFAULT_LABEL_PADDING * 2);
+        }
     }
 }

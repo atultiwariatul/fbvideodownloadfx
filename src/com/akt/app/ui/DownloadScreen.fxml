@@ -25,18 +25,18 @@
         <VBox spacing="20.0">
             <GridPane>
                 <padding>
-                    <Insets top="80.0"/>
+                    <Insets top="120.0"/>
                 </padding>
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0"/>
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="30.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="30.0" prefHeight="60.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
                 <Button fx:id="directorySelect" alignment="CENTER" defaultButton="true" mnemonicParsing="false"
-                        text="Download Directory" StackPane.alignment="CENTER_RIGHT">
+                        text="Download Directory" StackPane.alignment="CENTER_RIGHT" styleClass="button">
                 </Button>
                 <Label fx:id="directoryChosen" GridPane.columnIndex="1" GridPane.rowIndex="0">
                 </Label>
@@ -49,7 +49,7 @@
             </GridPane>
             <StackPane>
                 <Button fx:id="downloadButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false"
-                        text="Download" StackPane.alignment="CENTER_RIGHT" disable="true">
+                        text="Download" StackPane.alignment="CENTER_RIGHT" disable="true" styleClass="button">
                 </Button>
                 <ProgressBar fx:id="progressBar" visible="false">
 

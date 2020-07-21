@@ -34,6 +34,8 @@ public class DownloadService {
             stage.getIcons().setAll(loginicon);
             stage.setTitle("Facebook Video Downloader");
             stage.setScene(new Scene(root));
+            stage.setHeight(400);
+            stage.setWidth(800);
             stage.setResizable(true);
             DownloadScreenController loginController = fxmlLoader.<DownloadScreenController>getController();
             loginController.initializeManager(this);
