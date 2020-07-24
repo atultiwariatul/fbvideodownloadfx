@@ -72,7 +72,7 @@ public class DownloadLinkProvider {
         }
         if (link==null){
             downloadLinkObj.setMessage("Get Vid is not able to provide any link for this video:");
-            return null;
+            return downloadLinkObj;
         }
         String downloadLink = link.select("a").first().attr("href");
         System.out.println("\n\nDownload Link:" + downloadLink);

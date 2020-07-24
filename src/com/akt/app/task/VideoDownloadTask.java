@@ -41,12 +41,20 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
             uCon = downloadFileUrl.openConnection();
             is = uCon.getInputStream();
             buf = new byte[BUFFER_SIZE];
-            while ((byteRead = is.read(buf)) != -1) {
-                outStream.write(buf, 0, byteRead);
-                byteWritten += byteRead;
-                updateProgress(byteWritten, totalSize);
-                downloadDetails.setSize(byteWritten);
-                //System.out.println(byteWritten+" bytes of "+totalSize+" is written to Disk");
+            while ((byteRead = is.read(buf)) != -1 ) {
+                if (this.isCancelled()){
+                    System.out.println("Task is cancelled so stopping it");
+                    this.downloadDetails.setMessage("Download Cancelled After downloading:"+(byteWritten/1024)+" KB of Data/"+(totalSize/1024));
+                    updateMessage("Cancelled By user");
+                    updateTitle("Cancelled By User!");
+                    updateProgress(1,1);
+                    return this.downloadDetails;
+                }else{
+                    outStream.write(buf, 0, byteRead);
+                    byteWritten += byteRead;
+                    updateProgress(byteWritten, totalSize);
+                    downloadDetails.setSize(byteWritten);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,11 +64,17 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
                 assert is != null;
                 is.close();
                 outStream.close();
+                this.downloadDetails.setMessage("Download Successful");
             } catch (IOException e) {
                 e.printStackTrace();
                 this.downloadDetails.setMessage(e.getMessage());
             }
         }
         return this.downloadDetails;
+    }
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return super.cancel(mayInterruptIfRunning);
     }
 }
