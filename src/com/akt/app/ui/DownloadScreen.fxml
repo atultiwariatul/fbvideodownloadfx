@@ -10,6 +10,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ProgressBar?>
+<?import com.akt.app.ui.ProgressIndicatorBar?>
+<?import javafx.scene.layout.HBox?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40"
            fx:controller="com.akt.app.controllers.DownloadScreenController">
     <padding>
@@ -48,13 +50,18 @@
                 </Label>
             </GridPane>
             <StackPane>
+                <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" text="Cancel" StackPane.alignment="CENTER_LEFT" styleClass="button">
+                </Button>
                 <Button fx:id="downloadButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false"
                         text="Download" StackPane.alignment="CENTER_RIGHT" disable="true" styleClass="button">
                 </Button>
-                <ProgressBar fx:id="progressBar" visible="false">
 
-                </ProgressBar>
+            </StackPane>
+            <StackPane minWidth="800" minHeight="20" maxHeight="20">
+                <ProgressBar minWidth="800" fx:id="progressBar" visible="false"/>
             </StackPane>
         </VBox>
     </StackPane>
+
 </StackPane>
+
