@@ -32,6 +32,7 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
             e.printStackTrace();
 
         }
+        long startTime = 0;
         try {
             byte[] buf;
             int byteRead, byteWritten = 0;
@@ -41,6 +42,7 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
             uCon = downloadFileUrl.openConnection();
             is = uCon.getInputStream();
             buf = new byte[BUFFER_SIZE];
+            startTime = System.currentTimeMillis();
             while ((byteRead = is.read(buf)) != -1 ) {
                 if (this.isCancelled()){
                     System.out.println("Task is cancelled so stopping it");
@@ -52,6 +54,12 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
                 }else{
                     outStream.write(buf, 0, byteRead);
                     byteWritten += byteRead;
+//                    if (byteWritten>(1024*5)) {
+//                        float bytesPerSecond = byteWritten / ((System.currentTimeMillis() - startTime) / 1000.0f);
+//                        System.out.println("Download Speed =>" + bytesPerSecond + " BPS");
+//                        float kbPerSecond = bytesPerSecond/1024.0f;
+//                        System.out.println("Download Speed =>" + kbPerSecond + " KBPS");
+//                    }
                     updateProgress(byteWritten, totalSize);
                     downloadDetails.setSize(byteWritten);
                 }
@@ -64,7 +72,9 @@ public class VideoDownloadTask extends Task<DownloadDetails> {
                 assert is != null;
                 is.close();
                 outStream.close();
-                this.downloadDetails.setMessage("Download Successful");
+                long kbps = (this.downloadDetails.getTotalSize()/((System.currentTimeMillis() - startTime) / 1000))/1024;
+                System.out.println("Average Download speed in KBPS :"+kbps);
+                this.downloadDetails.setMessage("Download Successful, Avg speed :"+kbps+" KBPS");
             } catch (IOException e) {
                 e.printStackTrace();
                 this.downloadDetails.setMessage(e.getMessage());
