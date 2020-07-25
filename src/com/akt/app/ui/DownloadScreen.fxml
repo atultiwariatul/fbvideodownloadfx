@@ -52,6 +52,8 @@
             <StackPane>
                 <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" text="Cancel" StackPane.alignment="CENTER_LEFT" styleClass="button">
                 </Button>
+                <Button fx:id="playButton" alignment="CENTER" mnemonicParsing="false" text="Play" StackPane.alignment="CENTER" styleClass="button">
+                </Button>
                 <Button fx:id="downloadButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false"
                         text="Download" StackPane.alignment="CENTER_RIGHT" disable="true" styleClass="button">
                 </Button>

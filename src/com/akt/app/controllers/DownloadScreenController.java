@@ -16,6 +16,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -25,6 +26,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -40,14 +44,15 @@ public class DownloadScreenController {
     public Label statusLabel;
     public VBox progressIndicator;
     public Button cancelButton;
+    public Button playButton;
     private DownloadDetails downloadDetails = new DownloadDetails(null,null,null);
 
     private DownloadService downloadService;
     public void initializeManager(final DownloadService service) {
         this.downloadService = service;
         directorySelect.setOnAction(directoryChooserClickedEvent());
+        playButton.setOnAction(playButtonClicked(service));
         downloadButton.setOnAction(downloadButtonClickedEvent());
-
         downloadLink.focusedProperty().addListener (event -> {
             System.out.println("Event Text:"+downloadLink.getText());
             if (!downloadLink.getText().contains("https")){
@@ -69,7 +74,6 @@ public class DownloadScreenController {
         Thread thread = new Thread(calculateDownloadSizeTask);
         thread.setDaemon(true);
         thread.start();
-
         calculateDownloadSizeTask.setOnSucceeded(event -> {
             try {
                 this.downloadDetails = calculateDownloadSizeTask.get();
@@ -122,6 +126,35 @@ public class DownloadScreenController {
         );
     }
 
+    private EventHandler<ActionEvent> playButtonClicked(DownloadService service){
+        EventHandler<ActionEvent> event = e -> {
+            Label secondLabel = new Label("I'm a Label on new Window");
+
+            StackPane secondaryLayout = new StackPane();
+            secondaryLayout.getChildren().add(secondLabel);
+
+            Scene secondScene = new Scene(secondaryLayout, 600, 600);
+
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.setTitle("Second Stage");
+            newWindow.setScene(secondScene);
+            newWindow.initStyle(StageStyle.UTILITY);
+
+            // Specifies the modality for new window.
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+
+            // Specifies the owner Window (parent) for new window
+            newWindow.initOwner(service.getStage());
+
+            // Set position of second window, related to primary window.
+            newWindow.setX(service.getStage().getX() + 50);
+            newWindow.setY(service.getStage().getY() + 50);
+
+            newWindow.show();
+        };
+        return event;
+    }
     private EventHandler<ActionEvent> cancelDownloadEvent(VideoDownloadTask task){
 
         EventHandler<ActionEvent> event = e -> {
