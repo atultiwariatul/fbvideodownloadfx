@@ -1,67 +1,85 @@
 package com.akt.app.controllers;
 
 import com.akt.app.model.DownloadDetails;
+import com.akt.app.services.DownloadLinkProvider;
 import com.akt.app.services.DownloadService;
-import com.akt.app.task.CalculateDownloadSizeTask;
-import com.akt.app.task.VideoDownloadTask;
-import com.akt.app.ui.ProgressIndicatorBar;
-import com.akt.app.utils.ValidationUtil;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.akt.app.tasks.CalculateDownloadSizeTask;
+import com.akt.app.tasks.VideoDownloadTask;
+import com.akt.app.utils.Utils;
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSnackbarLayout;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-public class DownloadScreenController {
-    public Button directorySelect;
-    public String downloadDir;
-    public TextField downloadLink;
+import static com.akt.app.utils.Utils.VIDEOS_DIRECTORY;
+
+public class DownloadScreenController implements Initializable {
+    public TextField downloadDir;
+    public TextField fbDownloadLink;
     public Button downloadButton;
     public Label directoryChosen;
     public ProgressBar progressBar;
     public Label statusLabel;
-    public VBox progressIndicator;
     public Button cancelButton;
-    private DownloadDetails downloadDetails = new DownloadDetails(null,null,null);
+    public Button playButton;
+    public JFXSnackbar snackBar ;
+    public AnchorPane downloadAnchorPane;
+    public AnchorPane anchorPaneRef;
+
+    private DownloadDetails downloadDetails = new DownloadDetails();
 
     private DownloadService downloadService;
     public void initializeManager(final DownloadService service) {
-        this.downloadService = service;
-        directorySelect.setOnAction(directoryChooserClickedEvent());
-        downloadButton.setOnAction(downloadButtonClickedEvent());
 
-        downloadLink.focusedProperty().addListener (event -> {
-            System.out.println("Event Text:"+downloadLink.getText());
-            if (!downloadLink.getText().contains("https")){
-                downloadLink.requestFocus();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        this.downloadService = service;
+        System.out.println("Videos Directory Path:"+ VIDEOS_DIRECTORY);
+        anchorPaneRef = (AnchorPane) downloadButton.getParent();
+        downloadButton.setOnAction(downloadButtonClickedEvent());
+        fbDownloadLink.focusedProperty().addListener (event -> {
+            statusLabel.setVisible(true);
+            System.out.println("Event Text:"+fbDownloadLink.getText());
+            if (!fbDownloadLink.getText().contains("https")){
+                fbDownloadLink.requestFocus();
                 statusLabel.setText("Please enter valid Facebook video URL");
                 statusLabel.setTranslateY(2);
             }else{
                 statusLabel.setText("Download Link validated");
             }
         });
-        System.out.println("coming here");
+        snackBar = new JFXSnackbar(anchorPaneRef);
+
+//        snackBar.set
+        JFXSnackbarLayout snackbarLayout = new JFXSnackbarLayout("Snackbar Message" + 6, "UNDO", (event)->{
+            System.out.println("Going to close the snackbar");
+            if (event != null) {
+                snackBar.close();
+            }
+        });
+        JFXSnackbar.SnackbarEvent event = new JFXSnackbar.SnackbarEvent(snackbarLayout,new Duration(5000));
+        snackBar.enqueue(event);
     }
 
     private void calculateDownloadSize(ProgressBar progressBar, Label statusLabel){
+        statusLabel.setVisible(true);
         statusLabel.setText("Calculating Size...");
         System.out.println("In Calculate Download Size:"+this.downloadDetails.getDownloadDir());
         CalculateDownloadSizeTask calculateDownloadSizeTask = new CalculateDownloadSizeTask(downloadDetails);
@@ -69,7 +87,6 @@ public class DownloadScreenController {
         Thread thread = new Thread(calculateDownloadSizeTask);
         thread.setDaemon(true);
         thread.start();
-
         calculateDownloadSizeTask.setOnSucceeded(event -> {
             try {
                 this.downloadDetails = calculateDownloadSizeTask.get();
@@ -86,6 +103,7 @@ public class DownloadScreenController {
     }
 
     private void downloadVideo(ProgressBar progressBar, Label statusLabel){
+        statusLabel.setVisible(true);
         statusLabel.setText("Starting Download...");
         VideoDownloadTask videoDownloadTask = new VideoDownloadTask(downloadDetails);
         statusLabel.setText("Download Started...");
@@ -122,24 +140,26 @@ public class DownloadScreenController {
         );
     }
 
-    private EventHandler<ActionEvent> cancelDownloadEvent(VideoDownloadTask task){
 
+    private EventHandler<ActionEvent> cancelDownloadEvent(VideoDownloadTask task){
         EventHandler<ActionEvent> event = e -> {
             System.out.println("Cancelling Download");
             task.cancel(true);
+            statusLabel.setVisible(true);
             statusLabel.setText("Cancelled");
         };
         return event;
     }
-    private EventHandler<ActionEvent> directoryChooserClickedEvent(){
-        EventHandler<ActionEvent> event = e -> {
+    private EventHandler<MouseEvent> directoryChooserClickedEvent(){
+        EventHandler<MouseEvent> event = e -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             File selectedDirectory = directoryChooser.showDialog(downloadService.getStage());
             if(selectedDirectory == null){
                 //Put an Error Label;
             }else{
-                downloadDir = selectedDirectory.getAbsolutePath()+"/";
-                directoryChosen.setText(downloadDir);
+//                downloadDir = selectedDirectory.getAbsolutePath()+"/";
+                System.out.println("Dir:"+selectedDirectory.getName());
+                downloadDir.setText(selectedDirectory.getName());
                 System.out.println("After directory selector:"+this.downloadDetails.getDownloadDir());
                 downloadButton.setDisable(false);
             }
@@ -149,8 +169,9 @@ public class DownloadScreenController {
 
     private EventHandler<ActionEvent> downloadButtonClickedEvent(){
         EventHandler<ActionEvent> event = e -> {
-            String text  = downloadLink.getText();
-            if (!ValidationUtil.isValidURL(text)){
+            statusLabel.setVisible(true);
+            String text  = fbDownloadLink.getText();
+            if (!Utils.isValidURL(text)){
                 System.out.println("URL is not valid");
                 statusLabel.setText("URL Entered is not valid");
                 statusLabel.setTextFill(Color.RED);
@@ -175,7 +196,7 @@ public class DownloadScreenController {
                 statusLabel.setText(this.downloadDetails.getMessage());
                 statusLabel.setTextFill(Color.RED);
             }else {
-                this.downloadDetails.setDownloadDir(downloadDir);
+//                this.downloadDetails.setDownloadDir(downloadDir);
                 progressBar.setVisible(true);
                 System.out.println("Starting thread");
                 calculateDownloadSize(progressBar, statusLabel);
@@ -184,5 +205,19 @@ public class DownloadScreenController {
         return event;
     }
 
-
+    public void selectDirectory() {
+        System.out.println("Click count");
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        System.out.println("Going to choose dialogue");
+        File selectedDirectory = directoryChooser.showDialog(downloadDir.getParent().getScene().getWindow());
+        if(selectedDirectory == null){
+            //Put an Error Label;
+        }else{
+//                downloadDir = selectedDirectory.getAbsolutePath()+"/";
+            System.out.println("Dir:"+selectedDirectory.getName());
+            downloadDir.setText(selectedDirectory.getName());
+            System.out.println("After directory selector:"+this.downloadDetails.getDownloadDir());
+            downloadButton.setDisable(false);
+        }
+    }
 }

@@ -1,10 +1,24 @@
-/*
-Caden Sumner <- Shameless Plug.
-CSS for elements in the register scene.
-*/
-
-/* Error Label */
-#errorLabel
+#error-label
 {
     -fx-text-fill : blanchedalmond;
+}
+
+.table-row-cell {
+    -fx-cell-size: 50px;
+}
+
+.tree-table-cell {
+    -fx-alignment: center ;
+}
+
+.jfx-snackbar-content {
+    -fx-background-color: RED;
+}
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+    -fx-font-size: 14;
+}
+
+.jfx-snackbar-action {
+    -fx-text-fill: #1f2429;
 }

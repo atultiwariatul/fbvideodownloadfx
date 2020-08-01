@@ -1,5 +1,7 @@
 package com.akt.app.model;
 
+import com.akt.app.utils.Utils;
+
 public class DownloadDetails {
     private String fbUrl;
     private String downloadLink;
@@ -11,9 +13,12 @@ public class DownloadDetails {
     private String message;
     private long totalSize;
     //TODO: Need to see how to get Default Video Directory of System.
-    private String downloadDir="";
+    private String downloadDir= Utils.VIDEOS_DIRECTORY;
     private boolean exists;
 
+
+    public DownloadDetails() {
+    }
 
     public DownloadDetails(String fbUrl, String downloadLink, String fileName) {
         this.fbUrl = fbUrl;
