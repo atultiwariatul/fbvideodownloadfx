@@ -16,7 +16,7 @@
 <!--                <FontAwesomeIconView value="USER"/>-->
 <!--            </graphic>-->
         </JFXButton>
-        <JFXButton accessibleText="download_history" buttonType="RAISED" focusTraversable="false" prefHeight="65.0" prefWidth="173.0" style="-fx-background-color: #344955; -fx-text-fill: #F9AA33;" text="Download history" textFill="WHITE">
+        <JFXButton accessibleText="download_history" buttonType="RAISED" focusTraversable="false" prefHeight="65.0" prefWidth="173.0" style="-fx-background-color: #344955; -fx-text-fill: #F9AA33;" text="Downloaded Videos" textFill="WHITE">
             <font>
                 <Font name="SansSerif Regular" size="16.0" />
             </font>

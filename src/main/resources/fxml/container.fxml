@@ -13,7 +13,7 @@
             <menus>
                 <Menu mnemonicParsing="false">
                     <graphic>
-                        <JFXHamburger fx:id="hamburger" prefHeight="37.0" prefWidth="30.0" stylesheets="/resources/css/hamburger.css" />
+                        <JFXHamburger fx:id="hamburger" prefHeight="37.0" prefWidth="30.0" stylesheets="/css/hamburger.css" />
                     </graphic>
                 </Menu>
             </menus>

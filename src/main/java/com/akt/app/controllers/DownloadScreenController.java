@@ -68,7 +68,7 @@ public class DownloadScreenController implements Initializable {
         snackBar = new JFXSnackbar(anchorPaneRef);
 
 //        snackBar.set
-        JFXSnackbarLayout snackbarLayout = new JFXSnackbarLayout("Snackbar Message" + 6, "UNDO", (event)->{
+        JFXSnackbarLayout snackbarLayout = new JFXSnackbarLayout("Application is Ready to use", "Hide", (event)->{
             System.out.println("Going to close the snackbar");
             if (event != null) {
                 snackBar.close();
