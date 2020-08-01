@@ -17,6 +17,6 @@
       <JFXButton fx:id="downloadButton" buttonType="RAISED" layoutX="315.0" layoutY="268.0" prefHeight="23.0" prefWidth="110.0" style="-fx-text-fill: #F9AA33;" text="Download" />
       <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="190.0" layoutY="268.0" prefHeight="23.0" prefWidth="110.0" style="-fx-text-fill: #F9AA33;" text="Cancel" textAlignment="RIGHT" />
       <Label fx:id="statusLabel" layoutX="172.0" layoutY="82.0" prefHeight="23.0" prefWidth="245.0" style="-fx-text-fill: #F9AA33;" text="Label" visible="false" />
-      <JFXSnackbar fx:id="snackBar" stylesheets="/resources/css/snackbar.css" layoutX="300.0" layoutY="100.0" />
+      <JFXSnackbar fx:id="snackBar" stylesheets="/css/snackbar.css" layoutX="300.0" layoutY="100.0" />
    </children>
 </AnchorPane>

@@ -42,8 +42,8 @@ public class NavigationController implements Initializable {
 
     private void loadMainContainer(){
         try {
-            VBox box = FXMLLoader.load(getClass().getResource("../ui/drawer.fxml"));
-            contentAnchorPane = FXMLLoader.load(getClass().getResource("../ui/download_link.fxml"));
+            VBox box = FXMLLoader.load(getClass().getResource("/fxml/drawer.fxml"));
+            contentAnchorPane = FXMLLoader.load(getClass().getResource("/fxml/download_link.fxml"));
 
             drawer.setSidePane(box);
             drawer.setContent(contentAnchorPane);
@@ -53,7 +53,7 @@ public class NavigationController implements Initializable {
                         switch (node.getAccessibleText()) {
                             case "download_video":
                                 try {
-                                    contentAnchorPane = FXMLLoader.load(getClass().getResource("../ui/download_link.fxml"));
+                                    contentAnchorPane = FXMLLoader.load(getClass().getResource("/fxml/download_link.fxml"));
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                 }
@@ -62,7 +62,7 @@ public class NavigationController implements Initializable {
                                 break;
                             case "download_history":
                                 try {
-                                    FlowPane pane = FXMLLoader.load(getClass().getResource("../ui/downloaded_items.fxml"));
+                                    FlowPane pane = FXMLLoader.load(getClass().getResource("/fxml/downloaded_items.fxml"));
                                     drawer.setContent(pane);
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
@@ -92,7 +92,7 @@ public class NavigationController implements Initializable {
         try {
             Launcher.isSplashLoaded = true;
 
-            StackPane pane = FXMLLoader.load(getClass().getResource(("../ui/splash.fxml")));
+            StackPane pane = FXMLLoader.load(getClass().getResource(("/fxml/splash.fxml")));
             anchorPane.getChildren().setAll(pane);
 
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(3), pane);
@@ -113,7 +113,7 @@ public class NavigationController implements Initializable {
 
             fadeOut.setOnFinished((e) -> {
                 try {
-                    AnchorPane parentContent = FXMLLoader.load(getClass().getResource("../ui/container.fxml"));
+                    AnchorPane parentContent = FXMLLoader.load(getClass().getResource("/fxml/container.fxml"));
                     anchorPane.getChildren().setAll(parentContent);
                 } catch (IOException ex) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);

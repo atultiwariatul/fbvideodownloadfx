@@ -14,11 +14,11 @@ public class Launcher extends Application {
     public void start(Stage stage) {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("./ui/container.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/container.fxml"));
             Scene scene = new Scene(root,600,400);
             stage.setScene(scene);
             stage.setTitle("Facebook Video Downloader");
-            scene.getStylesheets().add("/resources/css/register.css");
+            scene.getStylesheets().add("/css/register.css");
             stage.show();
         } catch(Exception e) {
             e.printStackTrace();
