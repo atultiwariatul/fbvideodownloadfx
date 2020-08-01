@@ -13,6 +13,13 @@
         <maven.compiler.target>14</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+            <id>my-repo2</id>
+            <name>mvnrepository</name>
+            <url>http://myrepo.net/repo</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -39,6 +46,18 @@
             <artifactId>javafx-web</artifactId>
             <version>16-ea+1</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.gluonhq</groupId>-->
+<!--            <artifactId>charm-glisten</artifactId>-->
+<!--            <version>5.0.1</version>-->
+<!--        </dependency>-->
 
+        <dependency>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>charm-glisten</artifactId>
+            <version>6.0.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/charm-glisten-6.0.5.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

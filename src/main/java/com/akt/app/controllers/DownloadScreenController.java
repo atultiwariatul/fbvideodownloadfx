@@ -6,6 +6,7 @@ import com.akt.app.services.DownloadService;
 import com.akt.app.tasks.CalculateDownloadSizeTask;
 import com.akt.app.tasks.VideoDownloadTask;
 import com.akt.app.utils.Utils;
+import com.gluonhq.charm.glisten.control.AutoCompleteTextField;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
 import javafx.event.ActionEvent;
@@ -29,8 +30,8 @@ import java.util.concurrent.ExecutionException;
 import static com.akt.app.utils.Utils.VIDEOS_DIRECTORY;
 
 public class DownloadScreenController implements Initializable {
-    public TextField downloadDir;
-    public TextField fbDownloadLink;
+    public AutoCompleteTextField downloadDir;
+    public AutoCompleteTextField fbDownloadLink;
     public Button downloadButton;
     public Label directoryChosen;
     public ProgressBar progressBar;

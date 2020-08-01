@@ -22,3 +22,19 @@
 .jfx-snackbar-action {
     -fx-text-fill: #1f2429;
 }
+
+.menu-bar{
+    -fx-background-image: url('/img/a2_software_lab.png') ;
+    -fx-background-color: #232F34;
+    -fx-background-repeat: no-repeat;
+    /*-fx-background-insets: 10,20;*/
+    /*-fx-background-size: 30, 30;*/
+    -fx-background-position: center;
+    /*-fx-graphic: url("/img/text_logo.png");*/
+    /*-fx-*/
+    /*-fx-graphic-text-gap: 2px ;*/
+    /*-fx-background-image: url("/img/branding_text.png");*/
+    /*-fx-border-color:  #f0cd90;*/
+    /*-fx-border-width: 2*/
+
+}
