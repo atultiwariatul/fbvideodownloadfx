@@ -1,6 +1,6 @@
 package com.akt.app.services;
 
-import com.akt.app.controllers.DownloadScreenController;
+import com.akt.app.controllers.NavigationController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,21 +24,19 @@ public class DownloadService {
     }
 
     public void setScene_DownloadPage() {
-        URL url =  this.getClass().getResource("../ui/DownloadScreen.fxml");
+        URL url =  this.getClass().getResource("../ui/container.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
-        Image loginicon = new Image("/resources/img/loginicon.png");
+        Image loginicon = new Image("/resources/img/white_logo.png");
         try
         {
             Parent root = fxmlLoader.load();
-            root.getStylesheets().add("/resources/css/global.css");
+            root.getStylesheets().add("/resources/css/register.css");
             stage.getIcons().setAll(loginicon);
             stage.setTitle("Facebook Video Downloader");
-            stage.setScene(new Scene(root));
-            stage.setHeight(400);
-            stage.setWidth(800);
+            stage.setScene(new Scene(root,600,430));
             stage.setResizable(true);
-            DownloadScreenController loginController = fxmlLoader.<DownloadScreenController>getController();
-            loginController.initializeManager(this);
+            NavigationController loginController = fxmlLoader.getController();
+//            loginController.initializeManager(this);
         }
         catch (IOException e)
         {

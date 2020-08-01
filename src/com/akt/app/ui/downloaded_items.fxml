@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.FlowPane?>
+
+<FlowPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.akt.app.controllers.DownloadedItemsController">
+   <children>
+      <JFXTreeTableView fx:id="treeTableView" prefHeight="350.0" prefWidth="450.0" >
+         <FlowPane.margin>
+            <Insets left="140.0" />
+         </FlowPane.margin></JFXTreeTableView>
+   </children>
+</FlowPane>
