@@ -54,7 +54,7 @@ public class DownloadLinkProvider {
         DownloadDetails downloadLinkObj = new DownloadDetails(validURL,null,fileName);
         Element link = null;
         try {
-            link = getHTMLDocument(fbVideoUrl).select("div.col-md-4").first();
+            link = getHTMLDocument(validURL).select("div.col-md-4").first();
         } catch (IOException e) {
             e.printStackTrace();
             if (e instanceof UnknownHostException){
