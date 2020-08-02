@@ -7,16 +7,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="downloadAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="367.0" prefWidth="600.0" style="-fx-background-color: #344955;" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.akt.app.controllers.DownloadScreenController">
+<AnchorPane fx:id="downloadAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="600.0" style="-fx-background-color: #344955;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.akt.app.controllers.DownloadScreenController">
    <children>
-      <TextField fx:id="downloadDir" layoutX="173.0" layoutY="120.0" onKeyPressed="#selectDirectory" prefHeight="35.0" prefWidth="245.0" />
-      <TextField fx:id="fbDownloadLink" layoutX="173.0" layoutY="183.0" prefHeight="35.0" prefWidth="245.0" />
-      <JFXProgressBar fx:id="progressBar" layoutX="173.0" layoutY="228.0" prefHeight="2.0" prefWidth="245.0" visible="false" />
+      <TextField fx:id="downloadDir" layoutX="173.0" layoutY="120.0" onMouseClicked="#selectDirectory" prefHeight="35.0" prefWidth="245.0" promptText="Download Directory" />
+      <TextField fx:id="fbDownloadLink" layoutX="173.0" layoutY="183.0" prefHeight="35.0" prefWidth="245.0" promptText="Facebook Video Link" />
+      <JFXProgressBar fx:id="progressBar" layoutX="173.0" layoutY="228.0" prefHeight="8.0" prefWidth="245.0" visible="false" />
       <JFXButton fx:id="downloadButton" buttonType="RAISED" layoutX="315.0" layoutY="268.0" prefHeight="23.0" prefWidth="110.0" style="-fx-text-fill: #F9AA33;" text="Download" />
       <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="190.0" layoutY="268.0" prefHeight="23.0" prefWidth="110.0" style="-fx-text-fill: #F9AA33;" text="Cancel" textAlignment="RIGHT" />
-      <Label fx:id="statusLabel" layoutX="172.0" layoutY="82.0" prefHeight="23.0" prefWidth="245.0" style="-fx-text-fill: #F9AA33;" text="Label" visible="false" />
-      <JFXSnackbar fx:id="snackBar" stylesheets="/css/snackbar.css" layoutX="300.0" layoutY="100.0" />
+      <Label fx:id="statusLabel" layoutX="20.0" layoutY="82.0" prefHeight="23.0" prefWidth="567.0" style="-fx-text-fill: #F9AA33;" text="Status" alignment="CENTER" textAlignment="CENTER" visible="false" />
+      <JFXSnackbar fx:id="snackBar" layoutX="300.0" layoutY="100.0" stylesheets="/css/snackbar.css" />
    </children>
 </AnchorPane>

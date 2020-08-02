@@ -26,12 +26,12 @@ public class DownloadService {
     public void setScene_DownloadPage() {
         URL url =  this.getClass().getResource("../ui/container.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
-        Image loginicon = new Image("/img/white_logo.png");
+        Image logoIcon = new Image("/img/white_logo.png");
         try
         {
             Parent root = fxmlLoader.load();
             root.getStylesheets().add("/css/register.css");
-            stage.getIcons().setAll(loginicon);
+            stage.getIcons().setAll(logoIcon);
             stage.setTitle("Facebook Video Downloader");
             stage.setScene(new Scene(root,600,430));
             stage.setResizable(true);

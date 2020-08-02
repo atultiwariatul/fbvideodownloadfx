@@ -24,7 +24,6 @@ public class ProgressIndicatorBar extends StackPane {
          private static int DEFAULT_LABEL_PADDING = 5;
 
     public ProgressIndicatorBar() {
-        System.out.println("In constructr");
         this.createResettableProgressIndicatorBar();
     }
 

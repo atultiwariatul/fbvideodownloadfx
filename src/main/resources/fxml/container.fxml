@@ -9,7 +9,7 @@
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.akt.app.controllers.NavigationController">
     <children>
         <JFXDrawer fx:id="drawer" defaultDrawerSize="173.0" layoutY="33.0" prefHeight="367.0" prefWidth="100.0" style="-fx-background-color: #344955;" />
-        <MenuBar prefHeight="33.0" prefWidth="600.0" style="-fx-background-color: #232f34;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <MenuBar  prefHeight="33.0" prefWidth="600.0"  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu mnemonicParsing="false">
                     <graphic>

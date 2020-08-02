@@ -53,7 +53,7 @@ public class DownloadedItemsController implements Initializable {
         treeTableView.setOnMouseClicked((MouseEvent event) -> {
             if(event.getClickCount()>1){
                 String fileName=treeTableView.getSelectionModel().getSelectedItem().getValue().getName();
-                System.out.println("Mouse click Captured: File Clicked:"+fileName);
+                System.out.println("File Clicked:"+fileName);
                 Media media1 = new Media(new File(VIDEO_DIR +fileName).toURI().toString());
 
                 String heightWidth[] = null;

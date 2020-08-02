@@ -37,51 +37,54 @@ public class DownloadScreenController implements Initializable {
     public Label statusLabel;
     public Button cancelButton;
     public Button playButton;
-    public JFXSnackbar snackBar ;
+    public JFXSnackbar snackBar;
     public AnchorPane downloadAnchorPane;
     public AnchorPane anchorPaneRef;
 
     private DownloadDetails downloadDetails = new DownloadDetails();
 
     private DownloadService downloadService;
+
     public void initializeManager(final DownloadService service) {
 
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        this.downloadService = service;
-        System.out.println("Videos Directory Path:"+ VIDEOS_DIRECTORY);
+        System.out.println("User's Videos Directory Default Path:" + VIDEOS_DIRECTORY);
         anchorPaneRef = (AnchorPane) downloadButton.getParent();
+        snackBar = new JFXSnackbar(anchorPaneRef);
         downloadButton.setOnAction(downloadButtonClickedEvent());
-        fbDownloadLink.focusedProperty().addListener (event -> {
+        fbDownloadLink.focusedProperty().addListener(event -> {
             statusLabel.setVisible(true);
-            System.out.println("Event Text:"+fbDownloadLink.getText());
-            if (!fbDownloadLink.getText().contains("https")){
+            System.out.println("Event Text:" + fbDownloadLink.getText());
+            if (!fbDownloadLink.getText().contains("https") && !fbDownloadLink.getText().contains("facebook")) {
                 fbDownloadLink.requestFocus();
                 statusLabel.setText("Please enter valid Facebook video URL");
+//                fireSnackBarEvent("Please enter valid Facebook video URL","Hide");
                 statusLabel.setTranslateY(2);
-            }else{
+            } else {
                 statusLabel.setText("Download Link validated");
             }
         });
-        snackBar = new JFXSnackbar(anchorPaneRef);
+        fireSnackBarEvent("Application is ready to use","Hide");
+    }
 
-//        snackBar.set
-        JFXSnackbarLayout snackbarLayout = new JFXSnackbarLayout("Application is Ready to use", "Hide", (event)->{
-            System.out.println("Going to close the snackbar");
+    private void fireSnackBarEvent(String message, String actionText){
+        System.out.println("Going to fire a Snackbar Event");
+        JFXSnackbarLayout snackbarLayout = new JFXSnackbarLayout(message, actionText, (event) -> {
             if (event != null) {
                 snackBar.close();
             }
         });
-        JFXSnackbar.SnackbarEvent event = new JFXSnackbar.SnackbarEvent(snackbarLayout,new Duration(5000));
+        JFXSnackbar.SnackbarEvent event = new JFXSnackbar.SnackbarEvent(snackbarLayout, new Duration(5000));
         snackBar.enqueue(event);
     }
 
-    private void calculateDownloadSize(ProgressBar progressBar, Label statusLabel){
+    private void calculateDownloadSize(ProgressBar progressBar, Label statusLabel) {
         statusLabel.setVisible(true);
         statusLabel.setText("Calculating Size...");
-        System.out.println("In Calculate Download Size:"+this.downloadDetails.getDownloadDir());
+        System.out.println("In Calculate Download Size:" + this.downloadDetails.getDownloadDir());
         CalculateDownloadSizeTask calculateDownloadSizeTask = new CalculateDownloadSizeTask(downloadDetails);
         progressBar.progressProperty().bind(calculateDownloadSizeTask.progressProperty());
         Thread thread = new Thread(calculateDownloadSizeTask);
@@ -95,18 +98,20 @@ public class DownloadScreenController implements Initializable {
             }
             if (!this.downloadDetails.isExists()) {
                 downloadVideo(progressBar, statusLabel);
-            }else {
+            } else {
+                fireSnackBarEvent("YAY! You have already downloaded this file","Hide");
                 statusLabel.setText("YAY! You have already downloaded this file.");
                 statusLabel.setTextFill(Color.RED);
             }
         });
     }
 
-    private void downloadVideo(ProgressBar progressBar, Label statusLabel){
+    private void downloadVideo(ProgressBar progressBar, Label statusLabel) {
         statusLabel.setVisible(true);
         statusLabel.setText("Starting Download...");
         VideoDownloadTask videoDownloadTask = new VideoDownloadTask(downloadDetails);
         statusLabel.setText("Download Started...");
+        fireSnackBarEvent("Your Download has started","Hide");
         progressBar.progressProperty().bind(videoDownloadTask.progressProperty());
         Thread thread = new Thread(videoDownloadTask);
         thread.setDaemon(true);
@@ -118,17 +123,18 @@ public class DownloadScreenController implements Initializable {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-            if (this.downloadDetails.isExists()){
+            if (this.downloadDetails.isExists()) {
                 statusLabel.setText("YAY! You have already downloaded this file.");
                 statusLabel.setTextFill(Color.RED);
 
-            }else {
+            } else {
                 statusLabel.setText(this.downloadDetails.getMessage());
                 statusLabel.setTextFill(Color.web("#268515"));
             }
         });
         videoDownloadTask.setOnCancelled(event -> {
-                statusLabel.setText("Why you cancelled?");
+                    fireSnackBarEvent("Video Download Cancelled","Hide");
+                    statusLabel.setText("Why you cancelled?");
 //                    try {
 //                        System.out.println("Message from thread:"+videoDownloadTask.get().getMessage());
 //                    } catch (InterruptedException e) {
@@ -141,7 +147,7 @@ public class DownloadScreenController implements Initializable {
     }
 
 
-    private EventHandler<ActionEvent> cancelDownloadEvent(VideoDownloadTask task){
+    private EventHandler<ActionEvent> cancelDownloadEvent(VideoDownloadTask task) {
         EventHandler<ActionEvent> event = e -> {
             System.out.println("Cancelling Download");
             task.cancel(true);
@@ -150,53 +156,39 @@ public class DownloadScreenController implements Initializable {
         };
         return event;
     }
-    private EventHandler<MouseEvent> directoryChooserClickedEvent(){
-        EventHandler<MouseEvent> event = e -> {
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            File selectedDirectory = directoryChooser.showDialog(downloadService.getStage());
-            if(selectedDirectory == null){
-                //Put an Error Label;
-            }else{
-//                downloadDir = selectedDirectory.getAbsolutePath()+"/";
-                System.out.println("Dir:"+selectedDirectory.getName());
-                downloadDir.setText(selectedDirectory.getName());
-                System.out.println("After directory selector:"+this.downloadDetails.getDownloadDir());
-                downloadButton.setDisable(false);
-            }
-        };
-        return event;
-    }
 
-    private EventHandler<ActionEvent> downloadButtonClickedEvent(){
+    private EventHandler<ActionEvent> downloadButtonClickedEvent() {
         EventHandler<ActionEvent> event = e -> {
             statusLabel.setVisible(true);
-            String text  = fbDownloadLink.getText();
-            if (!Utils.isValidURL(text)){
+            String text = fbDownloadLink.getText();
+            if (!Utils.isValidURL(text)) {
                 System.out.println("URL is not valid");
                 statusLabel.setText("URL Entered is not valid");
+//                fireSnackBarEvent("Please enter a valid facebook url","Hide");
                 statusLabel.setTextFill(Color.RED);
-                return ;
+                return;
             }
 
             DownloadLinkProvider downloadLinkProvider = null;
             try {
                 downloadLinkProvider = new DownloadLinkProvider(text);
-            }catch (Exception e1){
+            } catch (Exception e1) {
                 e1.printStackTrace();
                 statusLabel.setWrapText(true);
-                statusLabel.setText("We got some serious error while processing:"+e1.getMessage());
+                statusLabel.setText("We got some serious error while processing:" + e1.getMessage());
+                fireSnackBarEvent("System error","Hide");
                 statusLabel.setTextFill(Color.RED);
                 return;
             }
             this.downloadDetails = downloadLinkProvider.getDownloadDetails().get(0);
-            if (this.downloadDetails.getMessage()!=null){
+            if (this.downloadDetails.getMessage() != null) {
                 System.out.println("There is some error.");
                 statusLabel.setTranslateY(0.5);
                 statusLabel.setWrapText(true);
                 statusLabel.setText(this.downloadDetails.getMessage());
                 statusLabel.setTextFill(Color.RED);
-            }else {
-//                this.downloadDetails.setDownloadDir(downloadDir);
+            } else {
+                this.downloadDetails.setDownloadDir(downloadDir.getText()+"/");
                 progressBar.setVisible(true);
                 System.out.println("Starting thread");
                 calculateDownloadSize(progressBar, statusLabel);
@@ -206,17 +198,16 @@ public class DownloadScreenController implements Initializable {
     }
 
     public void selectDirectory() {
-        System.out.println("Click count");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         System.out.println("Going to choose dialogue");
         File selectedDirectory = directoryChooser.showDialog(downloadDir.getParent().getScene().getWindow());
-        if(selectedDirectory == null){
+        if (selectedDirectory == null) {
             //Put an Error Label;
-        }else{
-//                downloadDir = selectedDirectory.getAbsolutePath()+"/";
-            System.out.println("Dir:"+selectedDirectory.getName());
-            downloadDir.setText(selectedDirectory.getName());
-            System.out.println("After directory selector:"+this.downloadDetails.getDownloadDir());
+        } else {
+            System.out.println("Selected Directory:" + selectedDirectory.getAbsolutePath());
+            fireSnackBarEvent("Selected Directory:" + selectedDirectory.getAbsolutePath(),"Hide");
+            downloadDir.setText(selectedDirectory.getAbsolutePath());
+            this.downloadDetails.setDownloadDir(selectedDirectory.getAbsolutePath()+"/");
             downloadButton.setDisable(false);
         }
     }
