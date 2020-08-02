@@ -14,11 +14,10 @@ public class Launcher extends Application {
     
     @Override
     public void start(Stage stage) {
-
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/container.fxml"));
             AnchorPane pane = (AnchorPane) root;
-            Image logoIcon = new Image("/img/blue_logo.png");
+            Image logoIcon = new Image("/img/white_logo.png");
             Scene scene = new Scene(root,600,400);
             stage.setScene(scene);
             stage.setTitle("Facebook Video Downloader");
