@@ -28,8 +28,13 @@ public class Utils {
     }
 
     public static String getFileName(String url) {
-        String[] tokens = url.split("=");
-        return tokens[tokens.length - 1];
+        if (url.contains("facebook")) {
+            String[] tokens = url.split("=");
+            return tokens[tokens.length - 1];
+        }else {
+            return url.substring(url.lastIndexOf("/")+1, url.indexOf(".mp4"));
+        }
+//        return null;
     }
 
     public static String validateVideoLink(String videoURL) {
@@ -86,13 +91,13 @@ public class Utils {
     }
 
     public static void main(String... args) {
-        String s = "?ref=saved&v=270418464144537.mp4";
+        String s = "?https://video-ams4-1.xx.fbcdn.net/v/t39.24130-2/10000000_1642682365886891_6641411404153519299_n.mp4?_nc_cat=107&_nc_sid=985c63&efg=eyJ2ZW5jb2RlX3RhZyI6Im9lcF9oZCJ9&_nc_ohc=Wx1Jp8T1_9UAX_XMHDd&_nc_ht=video-ams4-1.xx&oh=fe3ae2541f154c01d6e20ab42305a1c2&oe=5F5F04F9";
         String[] tokens = null;
 
         if (s.contains("ref")) {
             tokens = s.split("&");
         } else {
-
+            System.out.println(s.substring(s.lastIndexOf("/"),s.indexOf(".mp4")));
         }
         System.out.println(Arrays.toString(tokens));
     }

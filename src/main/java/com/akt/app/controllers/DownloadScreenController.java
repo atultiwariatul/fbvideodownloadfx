@@ -6,10 +6,14 @@ import com.akt.app.services.DownloadService;
 import com.akt.app.tasks.CalculateDownloadSizeTask;
 import com.akt.app.tasks.VideoDownloadTask;
 import com.akt.app.utils.Utils;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,6 +44,8 @@ public class DownloadScreenController implements Initializable {
     public JFXSnackbar snackBar;
     public AnchorPane downloadAnchorPane;
     public AnchorPane anchorPaneRef;
+    public JFXCheckBox directLink;
+    private boolean[] direct={false};
 
     private DownloadDetails downloadDetails = new DownloadDetails();
 
@@ -55,6 +61,13 @@ public class DownloadScreenController implements Initializable {
         anchorPaneRef = (AnchorPane) downloadButton.getParent();
         snackBar = new JFXSnackbar(anchorPaneRef);
         downloadButton.setOnAction(downloadButtonClickedEvent());
+        directLink.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("New value:"+newValue);
+            direct[0] = newValue;
+            System.out.println("isChecked:"+direct[0]);
+//            directLink.setSelected(!newValue);
+        });
+
         fbDownloadLink.focusedProperty().addListener(event -> {
             statusLabel.setVisible(true);
             System.out.println("Event Text:" + fbDownloadLink.getText());
@@ -171,7 +184,7 @@ public class DownloadScreenController implements Initializable {
 
             DownloadLinkProvider downloadLinkProvider = null;
             try {
-                downloadLinkProvider = new DownloadLinkProvider(text);
+                downloadLinkProvider = new DownloadLinkProvider(text,directLink.isSelected());
             } catch (Exception e1) {
                 e1.printStackTrace();
                 statusLabel.setWrapText(true);

@@ -16,6 +16,7 @@ import java.util.List;
 
 public class DownloadLinkProvider {
     private List<String> fbLinks;
+    private boolean directLink;
     private List<DownloadDetails> downloadDetails = new ArrayList<>();
 
     public DownloadLinkProvider(List<String> fbLinks) {
@@ -23,19 +24,35 @@ public class DownloadLinkProvider {
         prepareLinks();
     }
 
-    public DownloadLinkProvider(String fbURL){
+    public DownloadLinkProvider(String fbURL,boolean directLink){
         this.fbLinks = new ArrayList<>(1);
         this.fbLinks.add(fbURL);
+        this.directLink=directLink;
         prepareLinks();
     }
+
+    private DownloadDetails directLinkPrepare(String fbVideoUrl) {
+        String fileName = getFileNameFromLink(fbVideoUrl);
+        fileName = fileName.contains("=") ?  Utils.getFileName(fileName):fileName;
+        System.out.println("File Name:" + fileName);
+
+        DownloadDetails downloadLinkObj = new DownloadDetails(fbVideoUrl,fbVideoUrl,fileName);
+        return downloadLinkObj;
+    }
+
     public List<DownloadDetails> getDownloadDetails() {
         return downloadDetails;
     }
 
     private void prepareLinks(){
         fbLinks.parallelStream().forEach(downloadLinkObj -> {
-            downloadDetails.add(getDownloadLink(downloadLinkObj));
+            if (!directLink) {
+                downloadDetails.add(getDownloadLink(downloadLinkObj));
+            }else {
+                downloadDetails.add(directLinkPrepare(downloadLinkObj));
+            }
         });
+
     }
     private String getFileNameFromLink(String fbVideoUrl) {
         String[] splits = fbVideoUrl.split("/");
@@ -47,7 +64,7 @@ public class DownloadLinkProvider {
     }
     private DownloadDetails getDownloadLink(String fbVideoUrl)  {
         String fileName = getFileNameFromLink(fbVideoUrl);
-        String validURL = Utils.validateVideoLink(fileName);
+        String validURL = Utils.validateVideoLink(fbVideoUrl);
         System.out.println("Valid URL:"+validURL);
         fileName = fileName.contains("=") ?  Utils.getFileName(fileName):fileName;
         System.out.println("File Name:" + fileName);
